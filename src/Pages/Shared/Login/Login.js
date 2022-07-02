@@ -6,6 +6,7 @@ import auth from '../Firebase/Firebase.init';
 
 const Login = () => {
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+    console.log(gUser)
     const { register,reset, formState: { errors }, handleSubmit } = useForm();
     const [
         signInWithEmailAndPassword,
