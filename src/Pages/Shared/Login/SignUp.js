@@ -1,6 +1,29 @@
 import React from 'react';
+import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
+import auth from '../Firebase/Firebase.init';
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 const SignUp = () => {
+    const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+    const { register, formState: { errors }, handleSubmit } = useForm();
+    const [
+        createUserWithEmailAndPassword,
+        user,
+        loading,
+        error,
+    ] = useCreateUserWithEmailAndPassword(auth);
+
+    const [updateProfile, updating, updateError] = useUpdateProfile(auth);
+    
+    // onSubmit 
+    const onSubmit = async data => {
+        await createUserWithEmailAndPassword(data.email, data.password);
+        await updateProfile({ displayName: data.name });
+        console.log('update done');
+    }
+
+
     return (
         <div className='flex h-screen justify-center items-center'>
             <div className="card w-96 bg-base-100 shadow-xl">
@@ -77,7 +100,7 @@ const SignUp = () => {
                             </label>
                         </div>
 
-                        {signInError}
+                  
                         <input className='btn w-full max-w-xs text-white' type="submit" value="Sign Up" />
                     </form>
                     <p><small>Already have an account? <Link className='text-primary' to="/login">Please login</Link></small></p>
